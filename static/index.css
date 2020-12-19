@@ -1,0 +1,73 @@
+body,
+html
+{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: url(/static/images/girl_2.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.navbar-brand
+{
+    font-family: 'Anton', sans-serif;
+    font-size: 3vmin;
+}
+
+h1
+{
+    padding: 0px;
+    font-family: 'Anton', sans-serif;
+    font-size: 6vmin;
+    margin: 0;
+    color: #295696;
+    text-shadow: 0.1vmin 0.1vmin #6f8bb3;
+}
+
+h3
+{
+    font-family: 'Roboto', sans-serif;
+    font-size: 3vmin;
+    padding: 10px;
+    color: #fec345;
+    background-color: #295696;
+}
+
+hr
+{
+    border-color: #eb3461;
+    border-width: 3px;
+    max-width: 90px;
+    margin: 10px;
+}
+
+.btn
+{
+    background-color: #eb3461;
+    border-color: #eb3461;
+    color : white;
+    padding: 0.5rem 1rem;
+    font-family: 'Roboto', sans-serif;
+    font-size: 3vmin;
+    font-weight: 700;
+    border-radius: 300px;
+ }
+
+.btn:hover
+{
+    background-color: #eb3461;
+    border-color: #eb3461;
+    border-width: 4px;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: black;
+  text-align: center;
+}

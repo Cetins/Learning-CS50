@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- adding Google fonts-->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto&display=swap" rel="stylesheet">
+        <!-- adding bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- https://favicon.io/emoji-favicons/money-mouth-face/ -->
+        <link href="/static/favicon.ico" rel="icon">
+        <link href="/static/index.css" rel="stylesheet">
+        <title>{% block title %}Welcome{% endblock %}</title>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-light container-fluid d-flex align-items-top justify-content-start">
+            <a class="navbar-brand" href="/"><img href="index.html" src="/static/ladybug.png" width="30" height="30" class="d-inline-block align-left" alt=""></a>
+            <a class="navbar-brand" href="/login">Login</a>
+            <a class="navbar-brand" href="/register">Register</a>
+        </nav>
+        {% block main %}
+        <main class="container-fluid d-flex aligh-items-center justify-content-center h-100 w-100">
+                <div class="row align-items-center h-100">
+                    <h1 class="text-center col-12">Need help with debug your code?</h1>
+                    <section class="text-center col-12">
+                        <h3 class="d-inline-flex p-2"><strong>Find a study mate to solve problems quicker</strong></h3>
+                        <div>
+                            <center><hr></center>
+                        </div>
+                        <button type="button" class="btn btn-danger">Join Us Today!</button>
+                    </section>
+                </div>
+        </main>
+        {% endblock %}
+
+        <footer class="row footer">
+            <p class="text-center col-12 ">EDX Harvard | CS50 2019 | Final Project</p>
+        </footer>
+    </body>
+</html>
