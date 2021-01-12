@@ -1,10 +1,16 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Home
+    Check
 {% endblock %}
 
 {% block main %}
+
+    <div class="alert alert-dismissible alert-success success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="text-success">Your code <strong>{{ code }}</strong> has been registered in your database</h4>
+    </div>
+
     <table class="table table-bordered table-dark">
         <thead>
             <tr>

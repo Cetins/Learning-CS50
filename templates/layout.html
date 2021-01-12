@@ -1,34 +1,82 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <!-- adding Google fonts-->
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto&display=swap" rel="stylesheet">
-        <!-- adding bootstrap -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <!-- documentation at http://getbootstrap.com/docs/4.1/, alternative themes at https://bootswatch.com/ -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+
         <!-- https://favicon.io/emoji-favicons/money-mouth-face/ -->
         <link href="/static/favicon.ico" rel="icon">
+
         <link href="/static/styles.css" rel="stylesheet">
-        <!-- adding page name -->
-        <title>LadyBug {% block title %}{% endblock %}</title>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+        <title>Gift Card Database: {% block title %}{% endblock %}</title>
     </head>
 
-    <body>
-        <nav class="navbar navbar-light container-fluid d-flex align-items-top justify-content-start">
-            <a class="navbar-brand" href="/"><img href="index.html" src="/static/ladybug.png" width="30" height="30" class="d-inline-block align-left" alt=""></a>
-            <a class="navbar-brand" href="/my-profile">My Profile</a>
-            <a class="navbar-brand" href="/members">Members</a>
+    <body class="parent">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a class="navbar-brand" href="/">Gift Card Database</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarColor02">
+            {% if session.user_id %}
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="/">Home
+                    <span class="sr-only">(current)</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/generate">Generate</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/check">Check Code</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/validate">Validate</a>
+                </li>
+              </ul>
+              <ul class="navbar-nav ml-auto mt-2">
+                <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+              </ul>
+              {% else %}
+                <ul class="navbar-nav ml-auto mt-2">
+                  <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+                </ul>
+              {% endif %}
+          </div>
         </nav>
-        <main>
+
+        {% if get_flashed_messages() %}
+            <header>
+                <div class="alert alert-primary border text-center" role="alert">
+                    {{ get_flashed_messages() | join(" ") }}
+                </div>
+            </header>
+        {% endif %}
+
+        <main class="container p-5">
             {% block main %}{% endblock %}
         </main>
 
-        <footer>
-            <p class="text-center col-12">EDX Harvard | CS50 2019 | Final Project</p>
+
+        <footer class="small text-center">
+            EDX CS50 Harvard 2019 | Final Project | Gift Code Generator and Validator Database | Photo by Johannes Plenio from Pexels
         </footer>
+
     </body>
+
 </html>

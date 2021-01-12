@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Check
+{% endblock %}
+
+{% block main %}
+    <form action="/check" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="code" placeholder="Code" type="text">
+        </div>
+
+        <button class="btn btn-info" type="submit">Check</button>
+    </form>
+{% endblock %}

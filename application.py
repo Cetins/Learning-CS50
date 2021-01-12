@@ -1,6 +1,6 @@
-import sqlite3
 import os
 
+from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
@@ -8,6 +8,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import apology, login_required
+from code import get_random_alphanumeric_string
 
 # Configure application
 app = Flask(__name__)
@@ -29,21 +30,70 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-conn = sqlite3.connect('main.db')
+# Configure CS50 Library to use SQLite database
+db = SQL("sqlite:///main.db")
 
-db = conn.cursor()
-
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
+@login_required
 def index():
-    # Forget any user_id
-    session.clear()
+    """Show home page for user"""
+    rows = db.execute("SELECT code, type, amount, date FROM codes WHERE owner_id = ?", session["user_id"])
+    return render_template("index.html", rows=rows)
 
-    # User reached route via GET (as by clicking a link or via redirect)
+
+@app.route("/generate", methods=["GET", "POST"])
+@login_required
+def generate():
+    """Generate Random Unique Code"""
+
     if request.method == "GET":
-        return render_template("index.html")
-    # User reached route via POST (as by submitting a form via POST)
+        return render_template("generate.html")
     else:
-        return render_template("register.html")
+        if not request.form.get("length"):
+            return apology("must provide number", 403)
+
+        elif not request.form.get("amount"):
+            return apology("must provide amount", 403)
+
+        code_amount = int(request.form.get("amount"))
+
+        if code_amount < 1:
+            return apology("minumum amount is 1", 403)
+
+        length = int(request.form.get("length"))
+        code_type = request.form.get("type")
+        code_amount = request.form.get("amount")
+        code = get_random_alphanumeric_string(length)
+        owner_id = session["user_id"]
+        process = "generated and added to your database"
+
+        db.execute("INSERT INTO codes (owner_id, code, type, amount) VALUES (?, ?, ?, ?)", owner_id, code, code_type, code_amount)
+
+        return render_template("success.html", code=code, process=process)
+
+
+
+@app.route("/check", methods=["GET", "POST"])
+@login_required
+def check():
+    """Check Code in Database"""
+
+    if request.method == "GET":
+        return render_template("check.html")
+    else:
+        code = request.form.get("code")
+
+        if not request.form.get("code"):
+            return apology("must provide code", 403)
+
+        rows = db.execute("SELECT * from codes WHERE code = ? and owner_id = ?", code, session["user_id"])
+
+        if len(rows) == 1:
+            process = "found"
+            return render_template("checked.html", rows=rows)
+        else:
+            return apology("sorry code is not valid", 403)
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -72,7 +122,7 @@ def login():
             return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["username"]
+        session["user_id"] = rows[0]["id"]
 
         # Redirect user to home page
         return redirect("/")
@@ -80,6 +130,7 @@ def login():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("login.html")
+
 
 @app.route("/logout")
 def logout():
@@ -91,9 +142,43 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
+
+@app.route("/validate", methods=["GET", "POST"])
+@login_required
+def validate():
+    """Validate your code"""
+    if request.method == "GET":
+        return render_template("validate.html")
+    else:
+        code = request.form.get("code")
+        owner_id = session["user_id"]
+
+        if not request.form.get("code"):
+            return apology("must provide code", 403)
+
+        code_id_list = db.execute("SELECT id from codes WHERE code = ? and owner_id = ?", code, session["user_id"])
+
+        if len(code_id_list) == 1:
+            code_id = code_id_list[0]["id"]
+
+            db.execute("DELETE FROM codes WHERE id = ?", code_id)
+
+            check_code = db.execute("SELECT * from codes WHERE code = ? and owner_id = ?", code, owner_id)
+
+            if len(check_code) == 0:
+                process = "validated and deleted from database"
+                return render_template("success.html", code=code, process=process)
+            else:
+                return apology("sorry something went wrong, please check your code and try again", 403)
+        else:
+            return apology("sorry we couldn't find your code", 403)
+
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
+
 
     # Forget any user_id
     session.clear()
@@ -146,17 +231,13 @@ def register():
         return render_template("register.html")
 
 
-@app.route("/profile", methods=["GET", "POST"])
-@login_required
-def profile():
-    return apology("TODO", 403)
+def errorhandler(e):
+    """Handle error"""
+    if not isinstance(e, HTTPException):
+        e = InternalServerError()
+    return apology(e.name, e.code)
 
-@app.route("/inbox", methods=["GET", "POST"])
-@login_required
-def inbox():
-    return apology("TODO", 403)
 
-@app.route("/members", methods=["GET", "POST"])
-@login_required
-def members():
-    return apology("TODO", 403)
+# Listen for errors
+for code in default_exceptions:
+    app.errorhandler(code)(errorhandler)
