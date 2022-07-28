@@ -1,18 +1,16 @@
-EDX CS50 Harvard 2019 | Final Project | Gift Code Generator and Validator Database
+# EDX CS50 Harvard 2019 | Final Project | Gift Code Generator and Validator Database
 
 This web application based on CS50 Finance but polished with a darker theme by Bootstrap
 
 Aplication has 3 main functions:
 
-    1- Generates random codes from numbers and letters combination in a range of 8 to 16 characters.
+* Generates random codes from numbers and letters combination in a range of 8 to 16 characters.
+* Checks the code you receive from customer whether the code in still available in database.
+* Validate the code when customer used it and deletes from database to prevent multiple use.
 
-    2- Checks the code you receive from customer whether the code in still available in database.
+### There are 9 display pages and 1 layout page in the web application
 
-    3- Validate the code when customer used it and deletes from database to prevent multiple use.
-
-There are 9 display pages and 1 layout page in the web application
-
-index:
+index
     logged in user can see the existing codes in a table with the code, type of the code(cash/discount)
     if it's a cash gift card it's displayed as £
     if it's a discount gift card(voucher) it's displayed as % in addition to type column
